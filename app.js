@@ -25,11 +25,14 @@ function initMap() {
     map = new google.maps.Map(document.getElementById("map"),mapProp);
 
  	console.log(myCenterString);
+
 //This function uses google maps geocoding services to pull country name information from their API to be used later.
+
  var country = function() {
+
   var geocoder = new google.maps.Geocoder();
-  
   var latlng = myCenter;
+  
   geocoder.geocode({"location" : latlng}, function(results, status) {
     if (status === google.maps.GeocoderStatus.OK) {
       if (results[1]) {
@@ -40,7 +43,9 @@ function initMap() {
   var newsLocalityLocal = 'http://api.nytimes.com/svc/search/v2/articlesearch.json?fq=glocations:'+'"'+randomLocation+'"'+'=20120101&api-key=85bb8c0adbf93a2930ec27229bc6eb2d:5:74093223';
  newsLocality = newsLocalityLocal;
   console.log(randomLocation);
+
 //Request to NYTimes API for news data.
+
 var xhr = new XMLHttpRequest();
 xhr.open("GET", newsLocality , false);
 xhr.send();
