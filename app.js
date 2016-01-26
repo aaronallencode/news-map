@@ -32,7 +32,7 @@ function initMap() {
 
   var geocoder = new google.maps.Geocoder();
   var latlng = myCenter;
-  
+
   geocoder.geocode({"location" : latlng}, function(results, status) {
     if (status === google.maps.GeocoderStatus.OK) {
       if (results[1]) {
@@ -50,9 +50,10 @@ var xhr = new XMLHttpRequest();
 xhr.open("GET", newsLocality , false);
 xhr.send();
 newsData = JSON.parse(xhr.responseText);
+
 localNews = newsData.response.docs[0].snippet;
 localNewsUrl = newsData.response.docs[0].web_url;
-
+localNewsUrlLink = '"<a href='+localNewsUrl+'>'+localNewsUrl+'</a>"';
 console.log(localNews);
 console.log(localNewsUrl);
 console.log(xhr.status);
