@@ -65,7 +65,7 @@ var infowindow = new google.maps.InfoWindow({
     borderRadius: 5,
     borderWidth: 2
   });
-  infowindow.setContent(localNews + "<br>" + "<br>" + localNewsUrl + "<br>" + "<br>" + "Country:" + "  " + randomLocation);
+  infowindow.setContent(localNews + "<br>" + "<br>" + localNewsUrlLink + "<br>" + "<br>" + "Country:" + "  " + randomLocation);
   infowindow.open(map);
 
   return;
