@@ -1,10 +1,46 @@
- html, body { 
+html {
+	height: 100%;
+	}
+
+body { 
  	height: 100%; 
  	margin: 0; 
  	padding: 0; 
  }
 
+#wrapper {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+}
+
  #map { 
- 	height: 100%; 
+ 	height: 90%; 
+ 	z-index: 1;
  	position: relative;
  }
+
+#more {
+	left: 43%;
+    top: 93%;
+	position: absolute;
+	z-index: 1;
+}
+
+#northern {
+	left: 28%;
+	top: 93%;
+	position: absolute;
+	z-index: 1;
+}
+
+#southern {
+	left: 59%;
+	top: 93%;
+	position: absolute;
+	z-index: 1;
+}
+
+#button {
+	width: 100%;
+}
