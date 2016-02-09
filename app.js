@@ -6,12 +6,24 @@ var lonMax = 140;
 var newsData;
 var localNews;
 var localNewsUrl;
+var localNewsUrlLink;
 var randomLocation = "";
-var newsLocality = 'http://api.nytimes.com/svc/search/v2/articlesearch.json?fq=glocations:'+'"'+randomLocation+'"'+'=20120101&api-key=85bb8c0adbf93a2930ec27229bc6eb2d:5:74093223';
 var map;
+var region;
 
-//Main Function - Initializes map, provides local variables, defines random lat and lon. Contains country function.
-function initMap() {
+
+var northern = function() {
+latMin = 0;
+latMax = 60;
+};
+var southern = function() {
+  latMin = -40;
+  latMax = 0;
+};
+
+//Main Function - Initializes map, provides local variables. Contains country function.
+
+var initMap = function() {
   var randomLat = Math.random() * (latMax - latMin) + latMin;
   var randomLon = Math.random() * (lonMax - lonMin) + lonMin;
   var myCenter = new google.maps.LatLng(randomLat,randomLon);
@@ -23,13 +35,10 @@ function initMap() {
   };
 
     map = new google.maps.Map(document.getElementById("map"),mapProp);
-
+ 
  	console.log(myCenterString);
 
-//This function uses google maps geocoding services to pull country name information from their API to be used later.
-
  var country = function() {
-
   var geocoder = new google.maps.Geocoder();
   var latlng = myCenter;
 
@@ -41,57 +50,80 @@ function initMap() {
   randomLocation = (results[(results.length-1)].formatted_address);
  
   var newsLocalityLocal = 'http://api.nytimes.com/svc/search/v2/articlesearch.json?fq=glocations:'+'"'+randomLocation+'"'+'=20120101&api-key=85bb8c0adbf93a2930ec27229bc6eb2d:5:74093223';
- newsLocality = newsLocalityLocal;
+
   console.log(randomLocation);
 
-//Request to NYTimes API for news data.
-
 var xhr = new XMLHttpRequest();
-xhr.open("GET", newsLocality , false);
+xhr.open("GET", newsLocalityLocal , false);
 xhr.send();
 newsData = JSON.parse(xhr.responseText);
+newsDataDocuments = newsData.response.docs;
 
-localNews = newsData.response.docs[0].snippet;
-localNewsUrl = newsData.response.docs[0].web_url;
-localNewsUrlLink = '"<a href='+localNewsUrl+'>'+localNewsUrl+'</a>"';
+var getRandomInt = function() {
+  return Math.floor(Math.random() * 9);
+}
+var randomArticleInt;
+randomArticleInt = getRandomInt();
+
+console.log(randomArticleInt);
+console.log(newsDataDocuments);
+
+localNews = newsDataDocuments[randomArticleInt].snippet;
+
+localNewsUrl = newsDataDocuments[randomArticleInt].web_url;
+
+var localNewsImgUrl = "";
+var imgUrl = "";
+var localNewsImgLink = "";
+
+if (newsDataDocuments[randomArticleInt].multimedia[0]){
+localNewsImgUrl = newsDataDocuments[randomArticleInt].multimedia[0].url;
+imgUrl = 'http://www.nytimes.com/'+ localNewsImgUrl;
+localNewsImgLink = '"<img src='+imgUrl+'>"';
+}
+
+else {
+  localNewsImgLink = "Sorry! (No picture data for this article)";
+}
+
+
+var localNewsUrlLink = '"<a href='+localNewsUrl+'>'+localNewsUrl+'</a>"';
+
+console.log(localNewsImgLink);
 console.log(localNews);
 console.log(localNewsUrl);
 console.log(xhr.status);
 console.log(xhr.statusText);
-console.log(newsLocality);
+console.log(newsLocalityLocal);
+
+        if(localNews === "") {
+          console.log(status);
+          initMap();
+        }
 
 var infowindow = new google.maps.InfoWindow({
     position:myCenter,
-    borderRadius: 5,
-    borderWidth: 2
   });
-  infowindow.setContent(localNews + "<br>" + "<br>" + localNewsUrlLink + "<br>" + "<br>" + "Country:" + "  " + randomLocation);
+
+  infowindow.setContent(localNews + "<br>" + "<br>" + localNewsUrlLink + "<br>" + "<br>" + localNewsImgLink + "<br>" + "<br>" + "Country:" + "  " + randomLocation);
   infowindow.open(map);
-
-  return;
-    } 
-    else if (results.length < 1){
-      console.log(status)
-      initMap();
-    }
- } else if (status !== google.maps.GeocoderStatus.OK) { 
-  console.log(status);
-  initMap();
   
+    } 
+    else { 
+  console.log(status);
+  setTimeout(initMap,500);
   }
-
-
+ } 
+  else { 
+  console.log(status);
+  setTimeout(initMap,500);
+  }
 });
 }
 
 country();
 
-
-
- 
-
 }
-
 
 
 google.maps.event.addDomListener(window, 'load', initMap);
