@@ -22,6 +22,7 @@ body {
 
 
 #button {
+	float:left;
 	display: inline-block;
 	
 }
