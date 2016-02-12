@@ -20,27 +20,8 @@ body {
  	position: relative;
  }
 
-#more {
-	left: 43%;
-    top: 93%;
-	position: absolute;
-	z-index: 1;
-}
-
-#northern {
-	left: 28%;
-	top: 93%;
-	position: absolute;
-	z-index: 1;
-}
-
-#southern {
-	left: 59%;
-	top: 93%;
-	position: absolute;
-	z-index: 1;
-}
 
 #button {
-	width: 100%;
+	display: inline-block;
+	
 }
