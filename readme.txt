@@ -1,6 +1,8 @@
 README.txt
 NEWS MAP
 
+****Uses map and filter functions to process returned data*****
+
 The intention of News Map is to :
 1) Generate random Latitude and Longitude.
 2) Send this information to Google Maps API Geocoding services to return information about this location.
@@ -10,3 +12,4 @@ The intention of News Map is to :
 6) Display returned results in Google Maps InfoWindow.
 
 Refresh for new location.
+
