@@ -62,6 +62,23 @@ body {
 	top:1px;
 }
 
+#img {
+	position: absolute;
+z-index: 100;
+top: 4%; left: 37%;
+width: 25%;
+height: 8%;
+}
+
+#nyt_img {
+	position: absolute;
+z-index: 100;
+top: 2%; left: 88%;
+width: 200px;
+height: 40px;
+border:solid 1px;
+}
+
 #button1 {
 	width: 10%;
 	height: auto;
