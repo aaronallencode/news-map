@@ -5,6 +5,7 @@ var lonMin = -140;
 var lonMax = 140;
 var spin_button = '<button onClick="main()"  style="height:auto;width:50%;position:absolute;top:75%;left:40%;">Spin to another Random Location</button>';
 var myCenter;
+var myCenterPlus;
 var newsData;
 var newsDataDocs;
 var randomLocation = "";
@@ -25,6 +26,9 @@ var articleLink = "";
 var total;
 var section;
 var infowindow;
+var numberForeign;
+var numberBusiness;
+var numberEditorial;
 
 //Individual Functions All Listed Below
 
@@ -40,19 +44,25 @@ var southern = function() {
 };
 
 //creates random integer to be used later to grab an article
-var getRandomInt = function() {
-  return Math.floor(Math.random() * 9);
+var getRandomInt = function(x) {
+  return Math.floor(Math.random() * x);
 };
-var randomArticleInt = getRandomInt();
+var randomArticleInt = getRandomInt(9);
+
+var randomForeignInt;
+var randomBusinessInt;
+var randomEditorialInt;
 
 //Initializes map
 var initMap = function() {
   var randomLat = Math.random() * (latMax - latMin) + latMin;
   var randomLon = Math.random() * (lonMax - lonMin) + lonMin;
   myCenter = new google.maps.LatLng(randomLat,randomLon);
+  myCenterPlus = new google.maps.LatLng(randomLat+10,randomLon);
+
   var myCenterString = myCenter.toString();
   var mapProp = {
-    center: myCenter,
+    center: myCenterPlus,
     zoom: 3
   };
 
@@ -102,9 +112,7 @@ newsDataDocs = newsData.response.docs;
   if (newsDataDocs === []){
     main();
   }
-console.log(newsData);
-console.log(newsDataDocs);
-console.log(newsLocalityLocal);
+
 console.log(randomLocation);
 
 articles = newsDataDocs.map(function(article){
@@ -121,24 +129,37 @@ articlesForeign = articles.filter(function(article){
   return article.section === "Foreign";
 })
 
+numberForeign = articlesForeign.length;
+randomForeignInt = getRandomInt(numberForeign);
+
 articlesBusiness = articles.filter(function(article){
   return article.section === "Business";
 })
 
+numberBusiness = articlesBusiness.length;
+randomBusinessInt = getRandomInt(numberBusiness);
+
 articlesEditorial = articles.filter(function(article){
   return article.section === "Editorial";
 })
+
+numberEditorial = articlesEditorial.length;
+randomEditorialInt = getRandomInt(numberEditorial);
+
+console.log("Foreign Articles" + ":" + numberForeign);
+ console.log("Business Articles" + ":" + numberBusiness);
+ console.log("Editorial Articles" + ":" + numberEditorial);
 
 info();
 };
 
 //grabs foreign article
 var grabForeignArticle = function(){
-  if (articlesForeign) {
-    article = articlesForeign[0].snippet;
-    articleUrl = articlesForeign[0].url;
+  if (articlesForeign[randomForeignInt]) {
+    article = articlesForeign[randomForeignInt].snippet;
+    articleUrl = articlesForeign[randomForeignInt].url;
     articleLink = '"<a href='+articleUrl+'>'+articleUrl+'</a>"';
-    section = articlesForeign[0].section;
+    section = articlesForeign[randomForeignInt].section;
   } else {
     alert("No Foreign Articles Found, try another category/article or spin to a new location!");
   }
@@ -146,8 +167,8 @@ var grabForeignArticle = function(){
 
 //grabs foreign img
 var grabForeignImg = function() {
-    if (articlesForeign[0].media[0]){
-    localNewsImgUrl = articlesForeign[0].media[0];
+    if (articlesForeign[randomForeignInt].media[0]){
+    localNewsImgUrl = articlesForeign[randomForeignInt].media[0];
     imgUrl = 'http://www.nytimes.com/'+ localNewsImgUrl;
     articleImg = '"<img src='+imgUrl+'>"';
         } else {
@@ -157,11 +178,11 @@ var grabForeignImg = function() {
 
 //grabs business article
 var grabBusinessArticle = function(){
-  if (articlesBusiness[0]) {
-    article = articlesBusiness[0].snippet;
-    articleUrl = articlesBusiness[0].url;
+  if (articlesBusiness[randomBusinessInt]) {
+    article = articlesBusiness[randomBusinessInt].snippet;
+    articleUrl = articlesBusiness[randomBusinessInt].url;
     articleLink = '"<a href='+articleUrl+'>'+articleUrl+'</a>"';
-    section = articlesBusiness[0].section;
+    section = articlesBusiness[randomBusinessInt].section;
   } else {
     alert("No Business Articles Found, try another category/article or spin to a new location!");
   }
@@ -169,8 +190,8 @@ var grabBusinessArticle = function(){
 
 //grabs business img
 var grabBusinessImg = function() {
-    if (articlesBusiness[0]){
-    localNewsImgUrl = articlesBusiness[0].media[0];
+    if (articlesBusiness[randomBusinessInt].media[0]){
+    localNewsImgUrl = articlesBusiness[randomBusinessInt].media[0];
     imgUrl = 'http://www.nytimes.com/'+ localNewsImgUrl;
     articleImg = '"<img src='+imgUrl+'>"';
         } else {
@@ -180,19 +201,19 @@ var grabBusinessImg = function() {
 
 //grabs editorial article
 var grabEditorialArticle = function(){
-  if (articlesEditorial[0]) {
-    article = articlesEditorial[0].snippet;
-    articleUrl = articlesEditorial[0].url;
+  if (articlesEditorial[randomEditorialInt]) {
+    article = articlesEditorial[randomEditorialInt].snippet;
+    articleUrl = articlesEditorial[randomEditorialInt].url;
     articleLink = '"<a href='+articleUrl+'>'+articleUrl+'</a>"';
-    section = articlesEditorial[0].section;
+    section = articlesEditorial[randomEditorialInt].section;
   } else {
     alert("No Editorial Articles Found, try another category/article or spin to a new location!");
   }
 }
 
 var grabEditorialImg = function() {
-    if (articlesEditorial[0]){
-    localNewsImgUrl = articlesEditorial[0].media[0];
+    if (articlesEditorial[randomEditorialInt].media[0]){
+    localNewsImgUrl = articlesEditorial[randomEditorialInt].media[0];
     imgUrl = 'http://www.nytimes.com/'+ localNewsImgUrl;
     articleImg = '"<img src='+imgUrl+'>"';
         } else {
@@ -255,6 +276,9 @@ var infoSports = function() {
 
 //grabs foreign information then sets window
 var infoForeign = function() {
+  randomForeignInt = getRandomInt(numberForeign);
+  console.log(randomForeignInt);
+
   grabForeignArticle();
   grabForeignImg();
   setInfoWindow();
@@ -262,16 +286,24 @@ var infoForeign = function() {
 
 //grabs business information then sets window
 var infoBusiness = function() {
-   grabBusinessImg();
+  randomBusinessInt = getRandomInt(numberBusiness);
+  console.log(randomBusinessInt);
+
    grabBusinessArticle();
+   grabBusinessImg();
    setInfoWindow();
 }
 
 //grabs editorial information then sets window
+  
+
 var infoEditorial = function() {
-  grabEditorialArticle();
-  grabEditorialImg();
-  setInfoWindow();
+  randomEditorialInt = getRandomInt(numberBusiness);
+  console.log(randomEditorialInt);
+
+   grabEditorialArticle();
+   grabEditorialImg();
+   setInfoWindow();
 }
 
 //Main Function 
